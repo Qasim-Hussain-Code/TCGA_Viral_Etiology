@@ -35,4 +35,25 @@ rmarkdown::render("TCGA_Viral_Etiology_Analysis_Enhanced.Rmd")
 ├── results/                                   # CSV outputs
 └── figures/                                   # Visualizations
 ```
+
+## Key Results Visualizations
+
+### 1. PCA of Gene Expression
+![PCA Plot](figures/PCA_Plot.png)
+
+### 2. Volcano Plot: Viral vs Non-Viral
+![Volcano Plot](figures/Volcano_Plot_Viral_vs_NonViral.png)
+
+### 3. Top 50 Differentially Expressed Genes (Heatmap)
+![Heatmap Top 50 DEGs](figures/Heatmap_Top50_DEGs.png)
+
+### 4. Top Genes Expression (Boxplots)
+![Top Genes Boxplots](figures/Top_Genes_Boxplots.png)
+
+### 5. Survival Analysis (Cox Model)
+![Forest Plot Cox Model](figures/Forest_Plot_Cox_Model.png)
+
+### 6. MA Plot
+![MA Plot](figures/MA_Plot.png)
+
 **Data Source**: [TCGA-LIHC](https://portal.gdc.cancer.gov/)
