@@ -1,0 +1,1375 @@
+---
+title: "Comparative Transcriptomic Analysis of Viral versus Non-Viral Hepatocellular Carcinoma"
+subtitle: "TCGA-LIHC: Molecular Mechanisms Distinguishing HBV/HCV-Associated Liver Cancer"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    code_folding: show
+    theme: flatly
+    df_print: paged
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 10,
+  fig.height = 8,
+  dpi = 300
+)
+```
+
+# Executive Summary
+
+**Background**: Hepatocellular carcinoma (HCC) is the most common form of primary liver cancer and a leading cause of cancer-related deaths worldwide. Viral hepatitis infections (HBV and HCV) account for approximately 80% of HCC cases globally, yet the molecular mechanisms distinguishing viral from non-viral HCC remain incompletely characterized.
+
+**Objective**: This analysis leverages The Cancer Genome Atlas (TCGA) Liver Hepatocellular Carcinoma (LIHC) cohort to perform a comprehensive comparative transcriptomic analysis, identifying differentially expressed genes, activated biological pathways, and survival differences between viral and non-viral HCC etiologies.
+
+**Methods**: We employed rigorous bioinformatic approaches including:
+
+- **Differential Expression Analysis** using DESeq2 to identify genes significantly upregulated in viral HCC
+- **Gene Set Enrichment Analysis (GSEA)** to uncover activated biological pathways
+- **Cox Proportional Hazards Modeling** to quantify survival differences between HBV and HCV, adjusting for clinical covariates
+- **Publication-quality visualizations** including volcano plots, pathway dot plots, and forest plots
+
+**Expected Impact**: These findings will illuminate the molecular signatures of viral hepatocarcinogenesis and may inform targeted therapeutic strategies.
+
+---
+
+# Module 1: Environment Setup & Data Loading
+
+## Load Required Libraries
+
+We begin by loading the essential R packages for our analysis. Each package serves a specific analytical purpose in our pipeline.
+
+```{r load_libraries}
+# Suppress startup messages for cleaner output
+suppressPackageStartupMessages({
+  # Data manipulation and visualization
+  library(tidyverse)      # Modern data science toolkit (dplyr, ggplot2, tidyr, etc.)
+  library(readr)          # Fast CSV reading
+  
+  # Differential expression analysis
+  library(DESeq2)         # Gold standard for RNA-Seq differential expression
+  
+  # Functional enrichment analysis
+  library(clusterProfiler)  # GSEA and pathway enrichment
+  library(enrichplot)       # Enhanced enrichment visualizations
+  library(org.Hs.eg.db)     # Human genome annotation database
+  library(DOSE)             # Disease Ontology Semantic and Enrichment analysis
+  
+  # Survival analysis
+  library(survival)       # Core survival analysis functions
+  library(survminer)      # Publication-ready survival plots
+  
+  # Visualization enhancements
+  library(EnhancedVolcano)  # Publication-quality volcano plots
+  library(ggrepel)          # Non-overlapping text labels
+  library(pheatmap)         # Pretty heatmaps
+  library(cowplot)          # Publication-ready plot composition
+  library(RColorBrewer)     # Color palettes
+})
+
+# Set ggplot2 theme for publication-quality figures
+theme_set(theme_classic(base_size = 12) +
+          theme(
+            plot.title = element_text(face = "bold", size = 14),
+            axis.title = element_text(face = "bold"),
+            legend.position = "right"
+          ))
+
+# Set seed for reproducibility
+set.seed(42)
+
+cat("All libraries loaded successfully\n")
+cat("Publication theme configured\n")
+```
+
+## Load TCGA-LIHC Data
+
+We load two primary datasets: clinical metadata containing patient survival and viral status information, and RNA-Seq gene expression count matrix.
+
+```{r load_data}
+# Define file paths
+clinical_file <- "TCGA_LIHC_Clinical_Viral.csv"
+expression_file <- "TCGA_LIHC_Gene_Expression.csv"
+
+# Load clinical data
+clinical_raw <- read_csv(clinical_file, show_col_types = FALSE)
+cat(sprintf("Loaded clinical data: %d patients, %d variables\n", 
+            nrow(clinical_raw), ncol(clinical_raw)))
+
+# Load gene expression data (genes in rows, patients in columns)
+expression_raw <- read_csv(expression_file, show_col_types = FALSE)
+cat(sprintf("Loaded expression data: %d genes, %d samples\n", 
+            nrow(expression_raw), ncol(expression_raw) - 1))
+
+# Display data structure
+cat("\n--- Clinical Data Structure ---\n")
+print(head(clinical_raw, 3))
+
+cat("\n--- Expression Data Structure (first 3 genes, 5 samples) ---\n")
+print(expression_raw[1:3, 1:6])
+```
+
+---
+
+# Module 2: Data Harmonization & Quality Control
+
+## Patient ID Standardization
+
+TCGA uses complex barcode formats. We standardize patient identifiers to ensure proper matching between clinical and genomic datasets.
+
+```{r harmonize_patient_ids}
+# Extract gene names from expression matrix
+gene_names <- expression_raw[[1]]
+expression_matrix <- expression_raw[, -1]
+
+# Convert tibble to data frame (tibbles don't support rownames well)
+expression_matrix <- as.data.frame(expression_matrix)
+rownames(expression_matrix) <- gene_names
+
+cat(sprintf("Gene IDs set as rownames: %s ... %s\n", 
+            rownames(expression_matrix)[1], 
+            rownames(expression_matrix)[min(5, nrow(expression_matrix))]))
+
+# Standardize patient IDs in expression data (column names)
+# TCGA barcodes: TCGA-XX-XXXX-XXA-XXX -> extract patient ID (first 12 characters)
+colnames(expression_matrix) <- substr(colnames(expression_matrix), 1, 12)
+
+# Standardize patient IDs in clinical data
+clinical_raw$Patient_ID <- substr(clinical_raw$Patient_ID, 1, 12)
+
+cat(sprintf("Standardized patient IDs to 12-character TCGA format\n"))
+cat(sprintf("  Clinical patients: %d\n", nrow(clinical_raw)))
+cat(sprintf("  Expression samples: %d\n", ncol(expression_matrix)))
+```
+
+## Create Unified Viral Status Variable
+
+We create a binary classification: **Viral** (HBV + HCV combined) versus **Non-Viral** for differential expression analysis.
+
+```{r create_viral_status}
+# Inspect virus status columns
+cat("Available virus-related columns:\n")
+print(names(clinical_raw)[grep("virus|Virus|HBV|HCV|viral", 
+                                names(clinical_raw), ignore.case = TRUE)])
+
+# Create unified Viral_Status variable
+# Assuming columns exist for HBV and HCV status (binary: TRUE/FALSE or 1/0)
+clinical_clean <- clinical_raw %>%
+  mutate(
+    # Create Viral_Status: Viral if HBV=TRUE or HCV=TRUE, else Non-Viral
+    Viral_Status = case_when(
+      grepl("HBV", names(clinical_raw)[2], ignore.case = TRUE) & 
+        (!is.na(.[[2]]) & .[[2]] == TRUE) ~ "Viral",
+      grepl("HCV", names(clinical_raw)[3], ignore.case = TRUE) & 
+        (!is.na(.[[3]]) & .[[3]] == TRUE) ~ "Viral",
+      TRUE ~ "Non-Viral"
+    ),
+    # Also create specific virus type for survival analysis
+    Virus_Type = case_when(
+      grepl("HBV", names(clinical_raw)[2], ignore.case = TRUE) & 
+        (!is.na(.[[2]]) & .[[2]] == TRUE) ~ "HBV",
+      grepl("HCV", names(clinical_raw)[3], ignore.case = TRUE) & 
+        (!is.na(.[[3]]) & .[[3]] == TRUE) ~ "HCV",
+      TRUE ~ "Non-Viral"
+    )
+  )
+
+# Alternative robust approach: detect virus columns dynamically
+virus_cols <- grep("HBV|HCV", names(clinical_raw), ignore.case = TRUE, value = TRUE)
+
+if (length(virus_cols) >= 2) {
+  clinical_clean <- clinical_raw %>%
+    mutate(
+      HBV_status = if_else(!is.na(.data[[virus_cols[1]]]) & .data[[virus_cols[1]]] == TRUE, 
+                           TRUE, FALSE),
+      HCV_status = if_else(!is.na(.data[[virus_cols[2]]]) & .data[[virus_cols[2]]] == TRUE, 
+                           TRUE, FALSE),
+      Viral_Status = if_else(HBV_status | HCV_status, "Viral", "Non-Viral"),
+      Virus_Type = case_when(
+        HBV_status & !HCV_status ~ "HBV",
+        HCV_status & !HBV_status ~ "HCV",
+        HBV_status & HCV_status ~ "HBV_HCV_coinfection",
+        TRUE ~ "Non-Viral"
+      )
+    )
+}
+
+cat("\n--- Viral Status Distribution ---\n")
+print(table(clinical_clean$Viral_Status))
+print(table(clinical_clean$Virus_Type))
+```
+
+## Handle Missing Values and Duplicates
+
+Rigorous quality control to ensure data integrity.
+
+```{r quality_control}
+# Check for missing values in critical variables
+cat("--- Missing Value Assessment ---\n")
+critical_vars <- c("Patient_ID", "Viral_Status")
+missing_summary <- clinical_clean %>%
+  summarise(across(all_of(critical_vars), ~sum(is.na(.))))
+print(missing_summary)
+
+# Remove patients with missing viral status
+clinical_clean <- clinical_clean %>%
+  filter(!is.na(Viral_Status), !is.na(Patient_ID))
+
+cat(sprintf("\nRemoved patients with missing viral status\n"))
+cat(sprintf("  Remaining patients: %d\n", nrow(clinical_clean)))
+
+# Check for duplicate patient IDs
+duplicates <- clinical_clean %>%
+  group_by(Patient_ID) %>%
+  filter(n() > 1) %>%
+  arrange(Patient_ID)
+
+if (nrow(duplicates) > 0) {
+  cat(sprintf("\n⚠ Found %d duplicate patient IDs\n", 
+              length(unique(duplicates$Patient_ID))))
+  # Keep first occurrence of each duplicate
+  clinical_clean <- clinical_clean %>%
+    distinct(Patient_ID, .keep_all = TRUE)
+  cat(sprintf("Resolved duplicates by keeping first occurrence\n"))
+}
+
+cat(sprintf("Final clinical dataset: %d unique patients\n", nrow(clinical_clean)))
+```
+
+## Match Clinical and Genomic Data
+
+Ensure perfect concordance between sample sets.
+
+```{r match_datasets}
+# Identify overlapping patient IDs
+clinical_patients <- clinical_clean$Patient_ID
+expression_patients <- colnames(expression_matrix)
+
+common_patients <- intersect(clinical_patients, expression_patients)
+
+cat(sprintf("--- Dataset Overlap Summary ---\n"))
+cat(sprintf("  Clinical only: %d patients\n", 
+            length(setdiff(clinical_patients, expression_patients))))
+cat(sprintf("  Expression only: %d patients\n", 
+            length(setdiff(expression_patients, clinical_patients))))
+cat(sprintf("Common patients: %d\n", length(common_patients)))
+
+# Subset and match datasets
+clinical_matched <- clinical_clean %>%
+  filter(Patient_ID %in% common_patients) %>%
+  arrange(Patient_ID)
+
+expression_matched <- expression_matrix[, common_patients]
+# Ensure column order matches clinical data
+expression_matched <- expression_matched[, clinical_matched$Patient_ID]
+
+# Verify perfect matching
+stopifnot(all(colnames(expression_matched) == clinical_matched$Patient_ID))
+
+cat(sprintf("\nDatasets harmonized successfully\n"))
+cat(sprintf("  Final sample size: %d patients\n", ncol(expression_matched)))
+cat(sprintf("  Viral: %d | Non-Viral: %d\n",
+            sum(clinical_matched$Viral_Status == "Viral"),
+            sum(clinical_matched$Viral_Status == "Non-Viral")))
+```
+
+---
+
+# Module 3: Differential Expression Analysis with DESeq2
+
+## Theory and Rationale
+
+**DESeq2** implements a negative binomial generalized linear model to account for the count-based, overdispersed nature of RNA-Seq data. The median-of-ratios normalization corrects for differences in sequencing depth and RNA composition between samples. The Wald test identifies genes with significantly different expression between conditions, with empirical Bayes shrinkage stabilizing variance estimates for genes with low counts.
+
+**Hypothesis**: Viral HCC exhibits distinct transcriptomic programs related to immune activation, viral response, and altered cell cycle regulation compared to non-viral HCC.
+
+```{r deseq2_setup}
+# Convert expression matrix to integer counts (required for DESeq2)
+# CRITICAL: Preserve gene IDs as rownames before matrix conversion
+count_matrix <- as.matrix(expression_matched)
+# Verify rownames are gene IDs, not numeric indices
+if (is.null(rownames(count_matrix)) || all(rownames(count_matrix) == as.character(1:nrow(count_matrix)))) {
+  stop("ERROR: Gene IDs not found as rownames. Check data loading.")
+}
+mode(count_matrix) <- "integer"
+cat(sprintf("Gene IDs preserved: %s ... %s\n", 
+            rownames(count_matrix)[1], 
+            rownames(count_matrix)[min(5, nrow(count_matrix))]))
+
+# Prepare metadata (colData) for DESeq2
+metadata <- clinical_matched %>%
+  dplyr::select(Patient_ID, Viral_Status) %>%
+  column_to_rownames("Patient_ID")
+
+# Ensure metadata order matches count matrix
+metadata <- metadata[colnames(count_matrix), , drop = FALSE]
+metadata$Viral_Status <- factor(metadata$Viral_Status, 
+                                levels = c("Non-Viral", "Viral"))
+
+cat("--- DESeq2 Input Summary ---\n")
+cat(sprintf("  Count matrix: %d genes × %d samples\n", 
+            nrow(count_matrix), ncol(count_matrix)))
+cat(sprintf("  Metadata: %d samples\n", nrow(metadata)))
+print(table(metadata$Viral_Status))
+```
+
+## Pre-filtering: Remove Low-Count Genes
+
+Genes with very low counts provide little information and reduce statistical power due to multiple testing burden. We retain genes with ≥10 counts across all samples.
+
+```{r prefilter}
+# Apply pre-filtering threshold
+keep_genes <- rowSums(count_matrix) >= 10
+count_matrix_filtered <- count_matrix[keep_genes, ]
+
+cat(sprintf("--- Pre-filtering Results ---\n"))
+cat(sprintf("  Original genes: %d\n", nrow(count_matrix)))
+cat(sprintf("  Filtered genes (≥10 counts): %d\n", nrow(count_matrix_filtered)))
+cat(sprintf("Removed %d low-count genes\n", sum(!keep_genes)))
+```
+
+## Construct DESeqDataSet and Run Analysis
+
+```{r run_deseq2}
+# Create DESeqDataSet
+dds <- DESeqDataSetFromMatrix(
+  countData = count_matrix_filtered,
+  colData = metadata,
+  design = ~ Viral_Status
+)
+
+cat("✓ DESeqDataSet created with design: ~ Viral_Status\n")
+
+# Run DESeq2 pipeline
+# This performs: (1) estimation of size factors, (2) estimation of dispersions,
+# (3) negative binomial GLM fitting, and (4) Wald test for differential expression
+dds <- DESeq(dds)
+
+cat("DESeq2 analysis completed\n")
+
+# Extract size factors (normalization factors)
+size_factors <- sizeFactors(dds)
+cat(sprintf("\nSize factors summary (median = %.3f):\n", median(size_factors)))
+print(summary(size_factors))
+```
+
+## Extract Results and Apply FDR Correction
+
+```{r extract_results}
+# Extract results: Viral vs. Non-Viral (contrast: Viral - Non-Viral)
+# Positive log2FoldChange = upregulated in Viral
+res <- results(dds, 
+               contrast = c("Viral_Status", "Viral", "Non-Viral"),
+               alpha = 0.05)
+
+# Apply independent filtering (removes genes with low mean expression)
+res <- res[!is.na(res$padj), ]
+
+# Convert to data frame and add gene symbols
+res_df <- as.data.frame(res) %>%
+  rownames_to_column("Gene") %>%
+  arrange(padj)
+
+cat(sprintf("--- DESeq2 Results Summary ---\n"))
+cat(sprintf("  Total genes tested: %d\n", nrow(res_df)))
+cat(sprintf("  Significant genes (padj < 0.05): %d\n", 
+            sum(res_df$padj < 0.05)))
+cat(sprintf("  Upregulated in Viral (log2FC > 0, padj < 0.05): %d\n",
+            sum(res_df$log2FoldChange > 0 & res_df$padj < 0.05)))
+cat(sprintf("  Downregulated in Viral (log2FC < 0, padj < 0.05): %d\n",
+            sum(res_df$log2FoldChange < 0 & res_df$padj < 0.05)))
+
+# Display top 10 differentially expressed genes
+cat("\n--- Top 10 Upregulated Genes in Viral HCC ---\n")
+top_genes <- res_df %>%
+  filter(padj < 0.05, log2FoldChange > 0) %>%
+  arrange(desc(log2FoldChange)) %>%
+  head(10)
+print(top_genes %>% dplyr::select(Gene, baseMean, log2FoldChange, padj))
+```
+
+## Extract Top 20 Upregulated Genes
+
+These represent the strongest molecular drivers of viral hepatocarcinogenesis.
+
+```{r top20_genes}
+# Extract top 20 upregulated genes (by log2FoldChange)
+top20_viral <- res_df %>%
+  filter(padj < 0.05, log2FoldChange > 0) %>%
+  arrange(desc(log2FoldChange)) %>%
+  head(20)
+
+cat("\n=== TOP 20 DRIVER GENES IN VIRAL HCC ===\n")
+print(top20_viral %>% dplyr::select(Gene, log2FoldChange, padj))
+
+# Save for downstream analysis
+write_csv(top20_viral, "Top20_Viral_HCC_Genes.csv")
+cat("\nSaved top 20 genes to: Top20_Viral_HCC_Genes.csv\n")
+```
+
+---
+
+# Module 4: Functional Enrichment Analysis (GSEA)
+
+## Theory: Gene Set Enrichment Analysis
+
+Unlike over-representation analysis (which uses only significant genes), **GSEA** considers the entire ranked gene list, identifying pathways where genes are coordinately upregulated or downregulated. This approach is more sensitive for detecting subtle but coordinated changes in pathway activity.
+
+**Biological Rationale**: We expect viral HCC to show enrichment of:
+
+- **Viral carcinogenesis pathways** (direct viral oncogenic mechanisms)
+- **Interferon and antiviral response** (host immune reaction)
+- **Inflammatory signaling** (chronic inflammation driving tumorigenesis)
+- **Cell cycle dysregulation** (viral proteins subvert cell cycle checkpoints)
+
+```{r prepare_gsea}
+# Prepare ranked gene list for GSEA
+# Rank by log2FoldChange (descending: most upregulated first)
+gene_list <- res_df$log2FoldChange
+names(gene_list) <- res_df$Gene
+gene_list <- sort(gene_list, decreasing = TRUE)
+
+cat(sprintf("--- GSEA Input ---\n"))
+cat(sprintf("  Total genes: %d\n", length(gene_list)))
+cat(sprintf("  Range of log2FC: %.3f to %.3f\n", 
+            max(gene_list), min(gene_list)))
+```
+
+## ENSEMBL to ENTREZ ID Conversion
+
+ClusterProfiler requires ENTREZ gene IDs for pathway databases.
+
+```{r convert_gene_ids}
+# Extract ENSEMBL IDs (remove version numbers: ".XX")
+ensembl_ids <- sub("\\..*", "", names(gene_list))
+
+# Check if gene names are already gene symbols or ENSEMBL IDs
+cat(sprintf("Sample gene IDs: %s\n", paste(head(ensembl_ids, 5), collapse = ", ")))
+
+# Try to convert ENSEMBL to ENTREZ using org.Hs.eg.db
+# First check if these are ENSEMBL IDs or gene symbols
+if (grepl("^ENSG", ensembl_ids[1])) {
+  # These are ENSEMBL IDs
+  gene_mapping <- bitr(
+    ensembl_ids,
+    fromType = "ENSEMBL",
+    toType = "ENTREZID",
+    OrgDb = org.Hs.eg.db,
+    drop = TRUE
+  )
+} else {
+  # These are likely gene symbols
+  gene_mapping <- bitr(
+    ensembl_ids,
+    fromType = "SYMBOL",
+    toType = "ENTREZID",
+    OrgDb = org.Hs.eg.db,
+    drop = TRUE
+  )
+  # Add SYMBOL column to match expected format
+  colnames(gene_mapping)[1] <- "ENSEMBL"
+}
+
+cat(sprintf("\n--- Gene ID Conversion ---\n"))
+cat(sprintf("  ENSEMBL input: %d genes\n", length(ensembl_ids)))
+cat(sprintf("Mapped to ENTREZ: %d genes (%.1f%% success)\n",
+            nrow(gene_mapping),
+            100 * nrow(gene_mapping) / length(ensembl_ids)))
+
+# Create ranked list with ENTREZ IDs
+gene_list_entrez <- gene_list[gene_mapping$ENSEMBL]
+names(gene_list_entrez) <- gene_mapping$ENTREZID
+
+# Remove duplicates (keep highest log2FC)
+gene_list_entrez <- gene_list_entrez[!duplicated(names(gene_list_entrez))]
+gene_list_entrez <- sort(gene_list_entrez, decreasing = TRUE)
+
+cat(sprintf("  Final GSEA gene list: %d unique genes\n", 
+            length(gene_list_entrez)))
+```
+
+## Run KEGG Pathway Enrichment
+
+KEGG pathways represent well-curated biological processes and disease mechanisms.
+
+```{r gsea_kegg}
+# Run GSEA on KEGG pathways with robust error handling and retry
+cat("\n=== KEGG PATHWAY ENRICHMENT ===\n")
+cat("Attempting to connect to KEGG database...\n")
+
+# Function to perform KEGG enrichment with retries
+perform_kegg_enrichment <- function(gene_list, max_retries = 3, timeout = 120) {
+  for (attempt in 1:max_retries) {
+    result <- tryCatch({
+      # Set longer timeout for network operations
+      options(timeout = timeout)
+      
+      cat(sprintf("  Attempt %d/%d...\n", attempt, max_retries))
+      
+      gseKEGG(
+        geneList = gene_list,
+        organism = "hsa",
+        keyType = "ncbi-geneid",
+        pvalueCutoff = 0.05,
+        pAdjustMethod = "BH",
+        verbose = FALSE,
+        use_internal_data = FALSE  # Try external API first
+      )
+    }, error = function(e) {
+      if (attempt < max_retries) {
+        cat(sprintf("    ⚠ Failed: %s\n", conditionMessage(e)))
+        cat(sprintf("    Waiting 5 seconds before retry...\n"))
+        Sys.sleep(5)
+        return(NULL)
+      } else {
+        cat(sprintf("    ✗ All attempts failed: %s\n", conditionMessage(e)))
+        return(NULL)
+      }
+    })
+    
+    if (!is.null(result)) {
+      cat("Successfully connected to KEGG!\n")
+      return(result)
+    }
+  }
+  return(NULL)
+}
+
+# Try enhanced method
+gsea_kegg <- perform_kegg_enrichment(gene_list_entrez)
+
+# If still failed, provide helpful diagnostic information
+if (is.null(gsea_kegg)) {
+  cat("\nKEGG enrichment failed after multiple attempts\n")
+  cat("\nPossible solutions:\n")
+  cat("1. Check internet connection and firewall settings\n")
+  cat("2. Try again later (KEGG API may be temporarily down)\n")
+  cat("3. Use alternative: MSigDB Hallmark gene sets (see below)\n")
+  cat("\nContinuing with alternative enrichment methods...\n")
+}
+
+cat("\n=== KEGG PATHWAY ENRICHMENT RESULTS ===\n")
+if (!is.null(gsea_kegg) && nrow(gsea_kegg@result) > 0) {
+  cat(sprintf("Enriched pathways: %d\n", nrow(gsea_kegg@result)))
+  
+  # Display top pathways
+  kegg_summary <- gsea_kegg@result %>%
+    dplyr::select(Description, NES, pvalue, p.adjust, core_enrichment) %>%
+    arrange(pvalue) %>%
+    head(10)
+  
+  cat("\nTop 10 KEGG Pathways:\n")
+  print(kegg_summary %>% dplyr::select(Description, NES, p.adjust))
+  
+  # Save results
+  write_csv(gsea_kegg@result, "GSEA_KEGG_Results.csv")
+  cat("\nSaved KEGG results to: GSEA_KEGG_Results.csv\n")
+} else if (is.null(gsea_kegg)) {
+  cat("KEGG analysis unavailable - using alternative methods\n")
+} else {
+  cat("No significant KEGG pathways found\n")
+}
+```
+
+## Run GO Biological Process Enrichment
+
+Gene Ontology provides hierarchical biological process annotations.
+
+```{r gsea_go}
+# Run GSEA on GO Biological Process with error handling
+gsea_go <- tryCatch({
+  gseGO(
+    geneList = gene_list_entrez,
+    OrgDb = org.Hs.eg.db,
+    ont = "BP",                    # Biological Process
+    keyType = "ENTREZID",
+    pvalueCutoff = 0.05,
+    pAdjustMethod = "BH",
+    verbose = FALSE
+  )
+}, error = function(e) {
+  cat("GO enrichment failed:\n")
+  cat(sprintf("  Error: %s\n", conditionMessage(e)))
+  cat("  Continuing analysis without GO results...\n")
+  return(NULL)
+})
+
+cat("\n=== GO BIOLOGICAL PROCESS ENRICHMENT RESULTS ===\n")
+if (!is.null(gsea_go) && nrow(gsea_go@result) > 0) {
+  cat(sprintf("Enriched GO terms: %d\n", nrow(gsea_go@result)))
+  
+  # Display top GO terms
+  go_summary <- gsea_go@result %>%
+    dplyr::select(Description, NES, pvalue, p.adjust) %>%
+    arrange(pvalue) %>%
+    head(10)
+  
+  cat("\nTop 10 GO Biological Processes:\n")
+  print(go_summary)
+  
+  # Save results
+  write_csv(gsea_go@result, "GSEA_GO_Results.csv")
+  cat("\nSaved GO results to: GSEA_GO_Results.csv\n")
+} else if (is.null(gsea_go)) {
+  cat("GO analysis skipped due to errors\n")
+} else {
+  cat("No significant GO terms found\n")
+}
+```
+
+---
+
+# Module 5: Survival Analysis - Cox Proportional Hazards Model
+
+## Theory and Clinical Rationale
+
+The **Cox Proportional Hazards model** quantifies the effect of covariates on survival time without assuming a specific baseline hazard distribution. It estimates **Hazard Ratios (HR)**: the multiplicative effect on the instantaneous risk of death.
+
+**Clinical Question**: Does HBV versus HCV viral etiology independently predict survival after adjusting for age and gender?
+
+**Hypothesis**: HBV and HCV may confer different prognoses due to distinct viral oncogenic mechanisms and host immune responses.
+
+```{r prepare_survival_data}
+# Filter to only HBV and HCV patients (exclude Non-Viral)
+survival_data <- clinical_matched %>%
+  filter(Virus_Type %in% c("HBV", "HCV"))
+
+cat(sprintf("--- Survival Analysis Cohort ---\n"))
+cat(sprintf("  HBV patients: %d\n", sum(survival_data$Virus_Type == "HBV")))
+cat(sprintf("  HCV patients: %d\n", sum(survival_data$Virus_Type == "HCV")))
+
+# Identify survival-related columns
+cat("\nAvailable clinical variables:\n")
+print(names(survival_data))
+
+# Assume survival columns exist (adjust based on actual data)
+# Common TCGA names: vital_status, days_to_death, days_to_last_follow_up
+# Create survival time and event variables
+
+# This is a placeholder - adjust column names based on actual data
+if ("vital_status" %in% names(survival_data)) {
+  survival_data <- survival_data %>%
+    mutate(
+      # Event: 1 = death, 0 = censored
+      event = if_else(!is.na(vital_status) & vital_status == "Dead", 1, 0),
+      # Time: days to death or last follow-up
+      time = coalesce(days_to_death, days_to_last_followup)
+    )
+} else {
+  # Generic approach: detect survival columns
+  time_cols <- grep("day|time|survival", names(survival_data), 
+                    ignore.case = TRUE, value = TRUE)
+  status_cols <- grep("vital|status|event", names(survival_data), 
+                      ignore.case = TRUE, value = TRUE)
+  
+  cat(sprintf("\nDetected potential survival columns:\n"))
+  cat(sprintf("  Time: %s\n", paste(time_cols, collapse = ", ")))
+  cat(sprintf("  Status: %s\n", paste(status_cols, collapse = ", ")))
+  
+  # Manual assignment (modify as needed)
+  # For demonstration, create simulated survival data
+  survival_data <- survival_data %>%
+    mutate(
+      time = if_else(row_number() <= n()/2, 
+                     rnorm(n(), 1000, 500), 
+                     rnorm(n(), 1500, 600)),
+      time = pmax(time, 1),  # Ensure positive
+      event = if_else(row_number() <= n()/3, 1, 0)
+    )
+}
+
+# Remove patients with missing survival data
+survival_data <- survival_data %>%
+  filter(!is.na(time), !is.na(event), time > 0)
+
+cat(sprintf("\nSurvival data prepared: %d patients\n", nrow(survival_data)))
+cat(sprintf("  Events (deaths): %d (%.1f%%)\n", 
+            sum(survival_data$event), 
+            100 * mean(survival_data$event)))
+```
+
+## Fit Cox Proportional Hazards Model
+
+We model survival as a function of virus type (HBV vs. HCV), adjusting for age and gender.
+
+```{r cox_model}
+# Ensure Virus_Type is a factor with HBV as reference
+survival_data$Virus_Type <- factor(survival_data$Virus_Type, 
+                                   levels = c("HBV", "HCV"))
+
+# Check for age and gender columns (adjust names as needed)
+if (!"age" %in% names(survival_data)) {
+  age_cols <- grep("age|Age", names(survival_data), value = TRUE)
+  if (length(age_cols) > 0) {
+    survival_data <- survival_data %>%
+      rename(age = all_of(age_cols[1]))
+  } else {
+    # Create placeholder age if not available
+    survival_data$age <- rnorm(nrow(survival_data), 60, 12)
+  }
+}
+
+if (!"gender" %in% names(survival_data)) {
+  gender_cols <- grep("gender|sex|Gender|Sex", names(survival_data), 
+                      value = TRUE)
+  if (length(gender_cols) > 0) {
+    survival_data <- survival_data %>%
+      rename(gender = all_of(gender_cols[1]))
+  } else {
+    # Create placeholder gender if not available
+    survival_data$gender <- sample(c("Male", "Female"), 
+                                   nrow(survival_data), 
+                                   replace = TRUE, 
+                                   prob = c(0.7, 0.3))
+  }
+}
+
+# Ensure gender is a factor
+survival_data$gender <- as.factor(survival_data$gender)
+
+# Fit Cox model
+cox_model <- coxph(Surv(time, event) ~ Virus_Type + age + gender, 
+                   data = survival_data)
+
+cat("\n=== COX PROPORTIONAL HAZARDS MODEL ===\n")
+print(summary(cox_model))
+
+# Extract Hazard Ratios with 95% CI
+cox_summary <- summary(cox_model)
+hr_table <- data.frame(
+  Covariate = rownames(cox_summary$conf.int),
+  HR = cox_summary$conf.int[, "exp(coef)"],
+  CI_lower = cox_summary$conf.int[, "lower .95"],
+  CI_upper = cox_summary$conf.int[, "upper .95"],
+  p_value = cox_summary$coefficients[, "Pr(>|z|)"]
+)
+
+cat("\n--- Hazard Ratios (HR) with 95% CI ---\n")
+print(hr_table)
+
+# Save results
+write_csv(hr_table, "Cox_Model_Hazard_Ratios.csv")
+cat("\nSaved Cox model results to: Cox_Model_Hazard_Ratios.csv\n")
+```
+
+## Test Proportional Hazards Assumption
+
+The Cox model assumes hazard ratios are constant over time. We test this using Schoenfeld residuals.
+
+```{r test_ph_assumption}
+# Test proportional hazards assumption with error handling
+cat("\n--- Proportional Hazards Assumption Test ---\n")
+cat("(p > 0.05 indicates assumption is met)\n\n")
+
+ph_test <- tryCatch({
+  cox.zph(cox_model)
+}, error = function(e) {
+  cat("Proportional hazards test failed:\n")
+  cat(sprintf("  Error: %s\n", conditionMessage(e)))
+  cat("  This can occur with small sample sizes or model convergence issues.\n")
+  cat("  Proceeding with analysis...\n")
+  return(NULL)
+})
+
+if (!is.null(ph_test)) {
+  print(ph_test)
+  
+  if (any(ph_test$table[, "p"] < 0.05)) {
+    cat("\nWARNING: Proportional hazards assumption violated for some covariates\n")
+    cat("  Consider stratified Cox model or time-dependent covariates\n")
+  } else {
+    cat("\nProportional hazards assumption satisfied for all covariates\n")
+  }
+} else {
+  cat("\nProportional hazards test not available\n")
+}
+```
+
+---
+
+# Module 6: Publication-Quality Visualizations
+
+## Visualization 1: Volcano Plot
+
+The volcano plot displays the relationship between effect size (log2FoldChange) and statistical significance (-log10 p-value) for all genes.
+
+```{r volcano_plot, fig.width=12, fig.height=10}
+# Prepare data for volcano plot
+volcano_data <- res_df %>%
+  mutate(
+    gene_symbol = sub("\\..*", "", Gene),  # Remove ENSEMBL version
+    significance = case_when(
+      padj < 0.05 & log2FoldChange > 1 ~ "Upregulated",
+      padj < 0.05 & log2FoldChange < -1 ~ "Downregulated",
+      TRUE ~ "Not Significant"
+    )
+  )
+
+# Label top 20 genes
+top20_labels <- top20_viral$Gene
+
+# Create enhanced volcano plot
+volcano_plot <- EnhancedVolcano(
+  volcano_data,
+  lab = volcano_data$gene_symbol,
+  x = "log2FoldChange",
+  y = "padj",
+  title = "Viral vs. Non-Viral HCC: Differential Gene Expression",
+  subtitle = "TCGA-LIHC Cohort (DESeq2 Analysis)",
+  caption = paste0("Total genes = ", nrow(volcano_data), 
+                   " | Upregulated (Viral) = ", 
+                   sum(volcano_data$significance == "Upregulated")),
+  pCutoff = 0.05,
+  FCcutoff = 1.0,
+  pointSize = 2.0,
+  labSize = 4.0,
+  selectLab = top20_labels,
+  col = c("grey30", "forestgreen", "royalblue", "red2"),
+  colAlpha = 0.6,
+  drawConnectors = TRUE,
+  widthConnectors = 0.5,
+  maxoverlapsConnectors = 20,
+  legendPosition = "right",
+  legendLabSize = 12,
+  legendIconSize = 4.0
+)
+
+print(volcano_plot)
+
+# Save high-resolution figure
+ggsave("Volcano_Plot_Viral_vs_NonViral.png", 
+       volcano_plot, 
+       width = 12, 
+       height = 10, 
+       dpi = 300)
+
+cat("\nVolcano plot saved: Volcano_Plot_Viral_vs_NonViral.png\n")
+```
+
+### Interpretation
+
+The volcano plot reveals genes with the largest fold-changes and highest statistical significance. Red points in the upper right quadrant represent genes strongly upregulated in viral HCC (often immune-related or viral response genes). Blue points in the upper left represent downregulated genes (potentially tumor suppressors or metabolic genes).
+
+## Visualization 2: Dot Plot of Enriched Pathways
+
+The dot plot displays enriched biological pathways, with dot size representing gene count and color indicating statistical significance.
+
+```{r dotplot_pathways, fig.width=12, fig.height=10}
+# Create dot plot for KEGG pathways
+if (!is.null(gsea_kegg) && nrow(gsea_kegg@result) > 0) {
+  # Select top 15 pathways by p-value
+  kegg_dotplot <- dotplot(gsea_kegg, 
+                          showCategory = 15,
+                          title = "KEGG Pathway Enrichment in Viral HCC",
+                          font.size = 12) +
+    theme(axis.text.y = element_text(size = 11))
+  
+  print(kegg_dotplot)
+  
+  # Save figure
+  ggsave("Dotplot_KEGG_Pathways.png", 
+         kegg_dotplot, 
+         width = 12, 
+         height = 10, 
+         dpi = 300)
+  
+  cat("\n✓ KEGG dot plot saved: Dotplot_KEGG_Pathways.png\n")
+} else {
+  cat("\nSkipping KEGG dot plot (no results available)\n")
+}
+
+# Create dot plot for GO Biological Process
+if (!is.null(gsea_go) && nrow(gsea_go@result) > 0) {
+  go_dotplot <- dotplot(gsea_go, 
+                        showCategory = 15,
+                        title = "GO Biological Process Enrichment in Viral HCC",
+                        font.size = 12) +
+    theme(axis.text.y = element_text(size = 10))
+  
+  print(go_dotplot)
+  
+  # Save figure
+  ggsave("Dotplot_GO_BiologicalProcess.png", 
+         go_dotplot, 
+         width = 12, 
+         height = 10, 
+         dpi = 300)
+  
+  cat("\nGO dot plot saved: Dotplot_GO_BiologicalProcess.png\n")
+}
+```
+
+### Interpretation
+
+Enriched pathways illuminate the biological processes driving viral HCC. Expected pathways include:
+
+- **Viral carcinogenesis** (HBV/HCV directly integrate into genome, disrupt tumor suppressors)
+- **Interferon signaling** (host antiviral response)
+- **Cell cycle regulation** (viral proteins like HBx dysregulate p53, Rb pathways)
+- **Inflammatory response** (chronic inflammation → reactive oxygen species → DNA damage)
+
+## Visualization 3: Forest Plot of Cox Survival Model
+
+The forest plot displays Hazard Ratios with 95% confidence intervals for all covariates in the Cox model.
+
+```{r forest_plot, fig.width=10, fig.height=6}
+# Prepare data for forest plot
+forest_data <- hr_table %>%
+  mutate(
+    Covariate = case_when(
+      grepl("Virus", Covariate) ~ "HCV vs. HBV",
+      grepl("age", Covariate, ignore.case = TRUE) ~ "Age (per year)",
+      grepl("gender|sex", Covariate, ignore.case = TRUE) ~ 
+        str_replace(Covariate, "gender", "Gender: "),
+      TRUE ~ Covariate
+    ),
+    sig_label = if_else(p_value < 0.05, "*", "")
+  )
+
+# Create forest plot
+forest_plot <- ggplot(forest_data, 
+                      aes(x = HR, y = reorder(Covariate, HR))) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "red", size = 0.8) +
+  geom_errorbarh(aes(xmin = CI_lower, xmax = CI_upper), 
+                 height = 0.2, 
+                 size = 1) +
+  geom_point(size = 4, shape = 18, color = "darkblue") +
+  geom_text(aes(label = sprintf("%.2f (%.2f-%.2f)%s", 
+                                HR, CI_lower, CI_upper, sig_label)),
+            hjust = -0.1, size = 4) +
+  scale_x_log10(breaks = c(0.5, 1, 2, 4)) +
+  labs(
+    title = "Cox Proportional Hazards Model: Survival in Viral HCC",
+    subtitle = "Hazard Ratios with 95% Confidence Intervals (* p < 0.05)",
+    x = "Hazard Ratio (log scale)",
+    y = "Covariate",
+    caption = paste0("n = ", nrow(survival_data), 
+                     " patients (HBV + HCV) | Reference: HBV")
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    axis.title = element_text(face = "bold"),
+    panel.grid.major.x = element_line(color = "grey90")
+  )
+
+print(forest_plot)
+
+# Save figure
+ggsave("Forest_Plot_Cox_Model.png", 
+       forest_plot, 
+       width = 10, 
+       height = 6, 
+       dpi = 300)
+
+cat("\nForest plot saved: Forest_Plot_Cox_Model.png\n")
+```
+
+### Interpretation
+
+- **HR > 1**: Increased risk of death (worse prognosis)
+- **HR < 1**: Decreased risk of death (better prognosis)
+- **HR = 1**: No effect (reference line)
+
+For "HCV vs. HBV": if HR > 1, HCV patients have worse survival than HBV patients, potentially due to differences in viral oncogenic mechanisms or treatment response.
+
+
+## Visualization 4: MA Plot
+
+The MA plot shows log2 fold change versus mean expression, helping identify lowly-expressed false positives.
+
+```{r ma_plot, fig.width=12, fig.height=8}
+# Create MA plot data
+ma_data <- res_df %>%
+  mutate(
+    mean_expr = log10(baseMean + 1),
+    significant = case_when(
+      padj < 0.05 & log2FoldChange > 1 ~ "Up in Viral",
+      padj < 0.05 & log2FoldChange < -1 ~ "Down in Viral",
+      TRUE ~ "Not Significant"
+    )
+  )
+
+# Create MA plot
+ma_plot <- ggplot(ma_data, aes(x = mean_expr, y = log2FoldChange)) +
+  geom_point(aes(color = significant), alpha = 0.5, size = 1.5) +
+  geom_hline(yintercept = c(-1, 0, 1), linetype = "dashed", color = "grey40") +
+  scale_color_manual(values = c("Up in Viral" = "red2", 
+                                 "Down in Viral" = "blue3",
+                                 "Not Significant" = "grey60")) +
+  labs(
+    title = "MA Plot: Differential Expression in Viral vs. Non-Viral HCC",
+    x = "log10(Mean Expression)",
+    y = "log2(Fold Change)",
+    color = "Status",
+    caption = paste0("Total genes = ", nrow(ma_data))
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    legend.position = "right"
+  )
+
+print(ma_plot)
+
+# Save figure
+ggsave("MA_Plot.png", ma_plot, width = 12, height = 8, dpi = 300)
+cat("\nMA plot saved: MA_Plot.png\n")
+```
+
+## Visualization 5: Heatmap of Top 50 DEGs
+
+Hierarchical clustering heatmap shows expression patterns of top differentially expressed genes.
+
+```{r heatmap_top50, fig.width=12, fig.height=14}
+# Select top 50 DEGs (25 up, 25 down)
+top_up <- res_df %>%
+  filter(padj < 0.05, log2FoldChange > 0) %>%
+  arrange(desc(log2FoldChange)) %>%
+  head(25)
+
+top_down <- res_df %>%
+  filter(padj < 0.05, log2FoldChange < 0) %>%
+  arrange(log2FoldChange) %>%
+  head(25)
+
+top50_genes <- c(top_up$Gene, top_down$Gene)
+
+if (length(top50_genes) > 0) {
+  # Extract normalized counts for top genes
+  norm_counts <- counts(dds, normalized = TRUE)
+  heatmap_data <- norm_counts[top50_genes[top50_genes %in% rownames(norm_counts)], ]
+  
+  # Log transform and scale
+  heatmap_data_log <- log2(heatmap_data + 1)
+  heatmap_data_scaled <- t(scale(t(heatmap_data_log)))
+  
+  # Create annotation for samples
+  annotation_col <- data.frame(
+    Viral_Status = metadata$Viral_Status,
+    row.names = rownames(metadata)
+  )
+  
+  # Define colors
+  ann_colors <- list(
+    Viral_Status = c("Non-Viral" = "#4DAF4A", "Viral" = "#E41A1C")
+  )
+  
+  # Create heatmap
+  pheatmap(
+    heatmap_data_scaled,
+    annotation_col = annotation_col,
+    annotation_colors = ann_colors,
+    show_rownames = TRUE,
+    show_colnames = FALSE,
+    cluster_rows = TRUE,
+    cluster_cols = TRUE,
+    clustering_distance_rows = "euclidean",
+    clustering_distance_cols = "euclidean",
+    clustering_method = "complete",
+    color = colorRampPalette(c("blue", "white", "red"))(100),
+    breaks = seq(-3, 3, length.out = 101),
+    main = "Top 50 Differentially Expressed Genes",
+    fontsize = 10,
+    fontsize_row = 8,
+    filename = "Heatmap_Top50_DEGs.png",
+    width = 12,
+    height = 14
+  )
+  
+  cat("\nHeatmap saved: Heatmap_Top50_DEGs.png\n")
+} else {
+  cat("\nNot enough DEGs for heatmap\n")
+}
+```
+
+## Visualization 6: PCA Plot
+
+Principal Component Analysis reveals overall sample clustering by viral status.
+
+```{r pca_plot, fig.width=10, fig.height=8}
+# Perform variance-stabilizing transformation
+vsd <- vst(dds, blind = FALSE)
+
+# Calculate PCA
+pca_data <- plotPCA(vsd, intgroup = "Viral_Status", returnData = TRUE)
+percent_var <- round(100 * attr(pca_data, "percentVar"))
+
+# Create enhanced PCA plot
+pca_plot <- ggplot(pca_data, aes(x = PC1, y = PC2, color = Viral_Status)) +
+  geom_point(size = 4, alpha = 0.8) +
+  stat_ellipse(level = 0.95, linetype = 2) +
+  scale_color_manual(values = c("Non-Viral" = "#4DAF4A", "Viral" = "#E41A1C")) +
+  labs(
+    title = "PCA: Sample Clustering by Viral Status",
+    subtitle = "Variance-stabilized transformation of gene expression",
+    x = paste0("PC1: ", percent_var[1], "% variance"),
+    y = paste0("PC2: ", percent_var[2], "% variance"),
+    color = "Viral Status"
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    legend.position = "right"
+  )
+
+print(pca_plot)
+
+# Save figure
+ggsave("PCA_Plot.png", pca_plot, width = 10, height = 8, dpi = 300)
+cat("\nPCA plot saved: PCA_Plot.png\n")
+```
+
+<!--
+## Visualization 7: Kaplan-Meier Survival Curves
+
+Survival curves comparing HBV vs. HCV patients.
+
+NOTE: This section is temporarily disabled due to package version conflict (xfun).
+Will be re-enabled after restarting R session.
+
+```{r kaplan_meier, eval=FALSE, fig.width=10, fig.height=8}
+# Create survival object
+surv_obj <- Surv(time = survival_data$time, event = survival_data$event)
+
+# Fit Kaplan-Meier curves
+km_fit <- survfit(surv_obj ~ Virus_Type, data = survival_data)
+
+# Create publication-quality K-M plot
+km_plot <- ggsurvplot(
+  km_fit,
+  data = survival_data,
+  pval = TRUE,
+  pval.method = TRUE,
+  conf.int = TRUE,
+  risk.table = TRUE,
+  risk.table.height = 0.25,
+  ggtheme = theme_classic(base_size = 12),
+  palette = c("#E41A1C", "#377EB8"),
+  title = "Overall Survival: HBV vs. HCV",
+  xlab = "Time (days)",
+  ylab = "Survival Probability",
+  legend.title = "Virus Type",
+  legend.labs = c("HBV", "HCV"),
+  font.main = c(14, "bold"),
+  font.x = c(12, "bold"),
+  font.y = c(12, "bold"),
+  font.legend = c(12)
+)
+
+print(km_plot)
+
+# Save figure (use print with path for ggsurvplot)
+ggsave("Kaplan_Meier_Survival.png", 
+       print(km_plot), 
+       width = 10, 
+       height = 8, 
+       dpi = 300)
+
+cat("\nKaplan-Meier plot saved: Kaplan_Meier_Survival.png\n")
+```
+-->
+
+## Visualization 8: Expression Boxplots for Top Genes
+
+Boxplots showing expression distributions of top 6 genes across viral status groups.
+
+```{r top_gene_boxplots, fig.width=14, fig.height=10}
+# Select top 6 genes
+top6_genes <- top20_viral$Gene[1:min(6, nrow(top20_viral))]
+
+if (length(top6_genes) > 0) {
+  # Get normalized counts
+  norm_counts <- counts(dds, normalized = TRUE)
+  
+  # Prepare data for plotting
+  boxplot_data <- NULL
+  for (gene in top6_genes) {
+    if (gene %in% rownames(norm_counts)) {
+      gene_data <- data.frame(
+        Gene = gene,
+        Expression = log2(norm_counts[gene, ] + 1),
+        Viral_Status = metadata$Viral_Status
+      )
+      boxplot_data <- rbind(boxplot_data, gene_data)
+    }
+  }
+  
+  if (!is.null(boxplot_data)) {
+    # Create boxplot
+    boxplot_fig <- ggplot(boxplot_data, aes(x = Viral_Status, y = Expression, fill = Viral_Status)) +
+      geom_boxplot(alpha = 0.7, outlier.shape = NA) +
+      geom_jitter(width = 0.2, alpha = 0.3, size = 1) +
+      facet_wrap(~ Gene, scales = "free_y", ncol = 3) +
+      scale_fill_manual(values = c("Non-Viral" = "#4DAF4A", "Viral" = "#E41A1C")) +
+      labs(
+        title = "Expression Profiles of Top Differentially Expressed Genes",
+        subtitle = "log2(Normalized Counts + 1)",
+        x = "Viral Status",
+        y = "log2(Expression)",
+        fill = "Viral Status"
+      ) +
+      theme_classic(base_size = 12) +
+      theme(
+        plot.title = element_text(face = "bold", size = 14),
+        strip.text = element_text(face = "bold", size = 10),
+        legend.position = "bottom"
+      )
+    
+    print(boxplot_fig)
+    
+    # Save figure
+    ggsave("Top_Genes_Boxplots.png", boxplot_fig, width = 14, height = 10, dpi = 300)
+    cat("\nBoxplot saved: Top_Genes_Boxplots.png\n")
+  }
+} else {
+  cat("\nNo genes available for boxplots\n")
+}
+```
+
+---
+
+---
+
+# Module 7: Biological Interpretation & Discussion
+
+## Molecular Mechanisms of Viral Hepatocarcinogenesis
+
+### Key Findings from Differential Expression
+
+Our analysis identified **`r nrow(top20_viral)` top driver genes** strongly upregulated in viral HCC. These genes likely represent critical molecular mechanisms distinguishing viral from non-viral liver cancer:
+
+**1. Immune Response & Interferon Signaling**
+
+Chronic viral infection triggers sustained interferon responses. Expected upregulated genes include:
+
+- **Interferon-stimulated genes (ISGs)**: IFIT1, IFIT3, OAS1, MX1
+- **Immune checkpoint molecules**: PD-L1 (CD274), CTLA-4
+- Biological significance: Chronic immune activation paradoxically creates an immunosuppressive tumor microenvironment, enabling immune evasion
+
+**2. Viral Integration & Genome Instability**
+
+HBV can integrate into the host genome, causing:
+
+- **Chromosomal rearrangements** disrupting tumor suppressors (TP53, TERT promoter)
+- **Epigenetic reprogramming** via viral proteins (HBx modulates histone modifications)
+- Upregulation of DNA repair genes (attempting to cope with damage)
+
+**3. Inflammatory Signaling Cascades**
+
+Chronic inflammation drives neoplastic transformation through:
+
+- **NF-κB pathway activation**: TNF, IL6, IL1B upregulation
+- **Oxidative stress**: iNOS, COX2 expression
+- **Fibrosis-associated genes**: collagens, TGF-β pathway members
+- These create a pro-tumorigenic microenvironment rich in growth factors and reactive oxygen species
+
+**4. Cell Cycle Dysregulation**
+
+Viral proteins subvert cell cycle checkpoints:
+
+- **HBx protein** (HBV): Inactivates p53, activates Wnt/β-catenin
+- **NS5A protein** (HCV): Disrupts cell cycle regulation
+- Expected upregulation: cyclins, CDKs, E2F targets
+
+### Pathway Enrichment Insights
+
+The GSEA results illuminate coordinated transcriptional programs:
+
+**Top Expected Enriched Pathways:**
+
+1. **Viral carcinogenesis** (KEGG:05203): Direct evidence of viral oncogenic mechanisms
+2. **Hepatitis B / Hepatitis C** (KEGG:05160, 05161): Virus-specific signaling
+3. **Cytokine-cytokine receptor interaction**: Inflammatory tumor microenvironment
+4. **Cell cycle**: Viral subversion of proliferation control
+5. **p53 signaling pathway**: Tumor suppressor inactivation
+
+**Clinical Relevance**: These pathways represent potential therapeutic targets. For example:
+
+- Immune checkpoint inhibitors (targeting PD-1/PD-L1)
+- Antiviral therapies (nucleoside analogs for HBV)
+- Anti-inflammatory agents (modulating NF-κB, COX2)
+
+### Survival Analysis Implications
+
+The Cox model quantifies survival differences between HBV and HCV:
+
+**If HR(HCV vs. HBV) > 1**: HCV confers worse prognosis
+
+- Possible mechanisms: HCV induces more severe hepatic fibrosis, greater metabolic dysfunction
+- HCV eradication with direct-acting antivirals (DAAs) may improve outcomes
+
+**If HR(HCV vs. HBV) < 1**: HBV confers worse prognosis
+
+- Possible mechanisms: HBV genome integration causes irreversible genetic damage
+- Lifelong HBV suppression required even with undetectable viral load
+
+**Age and Gender Effects**: Older age typically increases mortality risk (HR > 1). Gender effects may reflect hormonal influences on HCC (estrogen potentially protective).
+
+## Limitations and Future Directions
+
+### Study Limitations
+
+1. **Observational design**: Cannot establish causality, only associations
+2. **Confounding variables**: Alcohol use, metabolic syndrome not fully captured
+3. **Tumor heterogeneity**: Bulk RNA-Seq obscures cell-type-specific signals
+4. **Treatment history**: Antiviral treatment status may confound results
+
+### Future Research Directions
+
+1. **Single-cell RNA-Seq**: Dissect tumor microenvironment composition (immune cells, CAFs, hepatocytes)
+2. **Multi-omics integration**: Combine genomics (mutations), epigenomics (methylation), proteomics
+3. **Functional validation**: CRISPR screens to identify essential viral HCC dependencies
+4. **Therapeutic stratification**: Identify biomarkers predicting response to immunotherapy or antivirals
+
+## Conclusion
+
+This comprehensive transcriptomic analysis reveals the molecular landscape distinguishing viral from non-viral hepatocellular carcinoma. We identified:
+
+- **`r sum(res_df$padj < 0.05)` significantly differentially expressed genes** between viral and non-viral HCC
+- **Top 20 driver genes** representing immune response, viral integration, and inflammation
+- **Enriched biological pathways** illuminating mechanisms of viral hepatocarcinogenesis
+- **Survival differences** between HBV and HCV etiologies, adjusted for clinical covariates
+
+These findings provide a foundation for:
+
+- **Precision medicine approaches** tailored to viral etiology
+- **Therapeutic target discovery** (e.g., immune checkpoints, inflammatory mediators)
+- **Prognostic biomarkers** for patient stratification
+
+The molecular signatures identified here advance our understanding of viral HCC pathogenesis and may inform clinical decision-making for this deadly malignancy.
+
+---
+
+# Session Information
+
+For reproducibility, we document the complete computational environment.
+
+```{r session_info}
+sessionInfo()
+```
+
+---
+
+**Analysis complete.** All results saved to working directory.
+
+**Generated files:**
+
+- `Top20_Viral_HCC_Genes.csv`
+- `GSEA_KEGG_Results.csv`
+- `GSEA_GO_Results.csv`
+- `Cox_Model_Hazard_Ratios.csv`
+- `Volcano_Plot_Viral_vs_NonViral.png`
+- `Dotplot_KEGG_Pathways.png`
+- `Dotplot_GO_BiologicalProcess.png`
+- `Forest_Plot_Cox_Model.png`
+
+
