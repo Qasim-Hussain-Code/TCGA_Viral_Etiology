@@ -1,0 +1,95 @@
+# ==============================================================================
+# SCRIPT: 00_Data_Acquisition.R
+# AUTHOR: Qasim Hussain
+# OUTPUT: 
+#   1. data/TCGA_LIHC_Clinical_Viral.csv (Cleaned, Viral Info Added)
+#   2. data/TCGA_LIHC_Gene_Expression.csv (Raw Counts)
+# ==============================================================================
+
+# 1. Setup & Libraries
+if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+if (!require("TCGAbiolinks", quietly = TRUE)) BiocManager::install("TCGAbiolinks")
+if (!require("tidyverse", quietly = TRUE)) install.packages("tidyverse")
+
+library(TCGAbiolinks)
+library(tidyverse)
+library(SummarizedExperiment)
+
+# Create Output Directory
+if (!dir.exists("data")) dir.create("data")
+
+# ==============================================================================
+# STEP 1: CLINICAL DATA (Download & Engineer)
+# ==============================================================================
+message("--- Step 1: Processing Clinical Data ---")
+
+# A. Query & Download (BCR XML contains the viral serology info)
+query_clin <- GDCquery(
+  project = "TCGA-LIHC",
+  data.category = "Clinical",
+  data.type = "Clinical Supplement",
+  data.format = "BCR XML"
+)
+GDCdownload(query_clin)
+clinical_raw <- GDCprepare_clinic(query_clin, clinical.info = "patient")
+
+# B. Feature Engineering (Robust Version)
+clinical_processed <- clinical_raw %>%
+  mutate(
+    # 1. Detect Virus from Text
+    Is_HBV = grepl("Hepatitis B", viral_hepatitis_serologies, ignore.case = TRUE),
+    Is_HCV = grepl("Hepatitis C", viral_hepatitis_serologies, ignore.case = TRUE),
+    
+    # 2. Assign Categories
+    Virus_Status = case_when(
+      Is_HBV & Is_HCV ~ "Co-Infection",
+      Is_HBV ~ "HBV",
+      Is_HCV ~ "HCV",
+      TRUE ~ "Non-Viral"
+    )
+  ) %>%
+  # C. Clean Up
+  select(-vital_status) %>%
+  
+  # Select meaningful columns (Using any_of() prevents crashes if 'race' is missing)
+  select(
+    Patient_ID = bcr_patient_barcode,
+    days_to_death,
+    days_to_last_followup,
+    gender,
+    any_of(c("race", "ajcc_pathologic_stage")), # Safe selection
+    viral_hepatitis_serologies,
+    Is_HBV,
+    Is_HCV,
+    Virus_Status
+  )
+
+# Save Clinical Data
+write.csv(clinical_processed, "data/TCGA_LIHC_Clinical_Viral.csv", row.names = FALSE)
+message("Saved: data/TCGA_LIHC_Clinical_Viral.csv")
+
+# ==============================================================================
+# STEP 2: GENE EXPRESSION (Download Raw Counts)
+# ==============================================================================
+message("--- Step 2: Processing Gene Expression Data ---")
+
+# A. Query & Download (STAR - Counts is the industry standard)
+query_rna <- GDCquery(
+  project = "TCGA-LIHC",
+  data.category = "Transcriptome Profiling",
+  data.type = "Gene Expression Quantification",
+  workflow.type = "STAR - Counts"
+)
+
+# Download in chunks to avoid timeout errors
+GDCdownload(query_rna, files.per.chunk = 10)
+
+# B. Prepare Matrix
+data_rna <- GDCprepare(query_rna)
+matrix_rna <- assay(data_rna) # Extract the count matrix
+
+# Save Gene Expression Data
+write.csv(matrix_rna, "data/TCGA_LIHC_Gene_Expression.csv", row.names = TRUE)
+message("Saved: data/TCGA_LIHC_Gene_Expression.csv")
+
+message("--- Data Acquisition Complete! ---")

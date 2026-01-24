@@ -1,0 +1,378 @@
+Patient_ID,days_to_death,days_to_last_followup,gender,viral_hepatitis_serologies,history_hepato_carcinoma_risk_factors,Is_HBV,Is_HCV,Virus_Status
+TCGA-2V-A95S,NA,NA,MALE,,Otherformer smoker,FALSE,FALSE,Non-Viral/Unknown
+TCGA-2Y-A9GS,724,NA,MALE,HCV GenotypeHepatitis B Surface AntigenHBV Core Antibody,Alcohol consumption,TRUE,TRUE,Co-Infection
+TCGA-2Y-A9GT,1624,NA,MALE,Hepatitis C Virus RNAHepatitis B Surface AntigenHBV Core AntibodyHBV DNA,Alcohol consumptionHepatitis BHepatitis C,TRUE,TRUE,Co-Infection
+TCGA-2Y-A9GU,NA,1939,FEMALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-2Y-A9GV,2532,NA,FEMALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Core Antibody,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-2Y-A9GW,1271,NA,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-2Y-A9GX,NA,2442,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-2Y-A9GY,757,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-2Y-A9GZ,848,NA,FEMALE,Hepatitis  C AntibodyHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-2Y-A9H0,NA,3675,MALE,,Alcohol consumptionHepatitis BHepatitis C,TRUE,TRUE,Co-Infection
+TCGA-2Y-A9H1,1229,NA,MALE,Hepatitis  C Antibody,Alcohol consumptionHepatitis C,FALSE,TRUE,HCV
+TCGA-2Y-A9H2,NA,1731,FEMALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Core Antibody,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-2Y-A9H3,NA,1516,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Alcohol consumptionNon-Alcoholic Fatty Liver Disease,TRUE,FALSE,HBV
+TCGA-2Y-A9H4,NA,1452,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-2Y-A9H5,555,NA,FEMALE,Hepatitis  C AntibodyHepatitis C Virus RNAHCV Genotype,Alcohol consumptionHepatitis C,FALSE,TRUE,HCV
+TCGA-2Y-A9H6,NA,357,FEMALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-2Y-A9H7,NA,1168,FEMALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-2Y-A9H8,633,NA,FEMALE,Hepatitis C Virus RNAHBV Surface AntibodyHBV DNA,Alcohol consumption,TRUE,TRUE,Co-Infection
+TCGA-2Y-A9H9,NA,697,MALE,,Alcohol consumptionHepatitis C,FALSE,TRUE,HCV
+TCGA-2Y-A9HA,36,NA,MALE,Hepatitis  C Antibody,Alcohol consumptionHepatitis C,FALSE,TRUE,HCV
+TCGA-2Y-A9HB,NA,260,MALE,Hepatitis C Virus RNAHCV Genotype,Alcohol consumption,FALSE,TRUE,HCV
+TCGA-3K-AAZ8,NA,396,MALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-4R-AA8I,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Non-Alcoholic Fatty Liver Disease,TRUE,FALSE,HBV
+TCGA-5C-A9VG,NA,328,MALE,,OtherWorker at steel factory,FALSE,FALSE,Non-Viral/Unknown
+TCGA-5C-A9VH,NA,322,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-5C-AAPD,NA,20,MALE,HBV Surface Antibody,Hepatitis B,TRUE,FALSE,HBV
+TCGA-5R-AA1C,NA,520,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-5R-AA1D,NA,449,FEMALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-5R-AAAM,46,NA,FEMALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-BC-4072,1490,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-4073,NA,849,MALE,,Hemochromatosis,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A10Q,1135,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A10R,308,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A10S,1423,NA,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A10T,837,NA,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A10U,837,NA,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A10W,91,NA,MALE,Hepatitis B Surface Antigen,Hepatitis B,TRUE,FALSE,HBV
+TCGA-BC-A10X,770,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A10Y,711,NA,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A10Z,34,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A110,2116,NA,FEMALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A112,153,NA,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A216,NA,1351,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A217,NA,421,FEMALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A3KF,NA,8,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A3KG,NA,680,FEMALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A5W4,NA,NA,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A69H,NA,444,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A69I,NA,387,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BC-A8YO,NA,562,FEMALE,,"Alcohol consumptionOtherChronic hepatitis, either viral or autoimmune",FALSE,FALSE,Non-Viral/Unknown
+TCGA-BD-A2L6,NA,1363,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-BD-A3EP,NA,409,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-BD-A3ER,NA,1115,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,HemochromatosisAlcohol Consumption,TRUE,FALSE,HBV
+TCGA-BW-A5NO,NA,NA,MALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-BW-A5NP,NA,NA,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-BW-A5NQ,NA,NA,MALE,,Alcohol consumptionOthercirrhosis,FALSE,FALSE,Non-Viral/Unknown
+TCGA-CC-5258,NA,NA,MALE,Hepatitis  C AntibodyHBV Surface Antibody,,TRUE,FALSE,HBV
+TCGA-CC-5259,NA,250,FEMALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-CC-5260,NA,NA,FEMALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,,TRUE,FALSE,HBV
+TCGA-CC-5261,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,,TRUE,FALSE,HBV
+TCGA-CC-5262,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-CC-5263,129,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-CC-5264,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,,TRUE,FALSE,HBV
+TCGA-CC-A123,NA,219,FEMALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,,TRUE,FALSE,HBV
+TCGA-CC-A1HT,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-CC-A3M9,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A3MA,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A3MB,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-CC-A3MC,NA,363,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A5UC,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A5UD,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A5UE,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A7IE,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A7IF,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A7IG,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A7IH,NA,365,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A7II,NA,399,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A7IJ,NA,382,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A7IK,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A7IL,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A8HS,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-CC-A8HT,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A8HU,NA,NA,FEMALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-CC-A8HV,NA,NA,FEMALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-CC-A9FS,NA,211,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A9FU,NA,NA,FEMALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Hepatitis B,TRUE,FALSE,HBV
+TCGA-CC-A9FV,NA,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-CC-A9FW,NA,248,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-DD-A113,NA,2425,FEMALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,OtherSmoking,TRUE,FALSE,HBV
+TCGA-DD-A114,1149,NA,MALE,Hepatitis C Virus RNAHCV GenotypeHepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Hepatitis C,TRUE,TRUE,Co-Infection
+TCGA-DD-A115,2542,NA,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Alcohol consumptionSmoking,TRUE,FALSE,HBV
+TCGA-DD-A116,1622,NA,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-A118,NA,3437,FEMALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,,TRUE,FALSE,HBV
+TCGA-DD-A119,223,NA,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-A11A,NA,79,MALE,Hepatitis B Surface AntigenHBV Core Antibody,"OtherHBcAB total (+), HBsAg (-), HBcIgm Ab (-)",TRUE,FALSE,HBV
+TCGA-DD-A11B,14,NA,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Non-Alcoholic Fatty Liver Disease,TRUE,FALSE,HBV
+TCGA-DD-A11C,NA,662,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,,TRUE,FALSE,HBV
+TCGA-DD-A11D,1560,NA,FEMALE,,Non-Alcoholic Fatty Liver Disease,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A1E9,2759,NA,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-DD-A1EA,NA,2415,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core AntibodyHBV DNA,Hepatitis Bsmoking,TRUE,FALSE,HBV
+TCGA-DD-A1EB,NA,2017,FEMALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Othersmoking,TRUE,FALSE,HBV
+TCGA-DD-A1EC,NA,602,FEMALE,,,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A1ED,NA,2301,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Alcohol consumptiontattoos,TRUE,FALSE,HBV
+TCGA-DD-A1EE,NA,NA,MALE,Hepatitis C Virus RNAHCV GenotypeHepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Hepatitis C,TRUE,TRUE,Co-Infection
+TCGA-DD-A1EF,394,NA,FEMALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-DD-A1EG,1372,NA,MALE,Hepatitis B Surface Antigen,Alcohol consumptionNon-Alcoholic Fatty Liver Disease,TRUE,FALSE,HBV
+TCGA-DD-A1EH,NA,1495,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core AntibodyHBV DNA,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-A1EI,NA,183,MALE,Hepatitis B Surface AntigenHBV DNA,Hepatitis Bcirrhosis,TRUE,FALSE,HBV
+TCGA-DD-A1EJ,NA,NA,FEMALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-DD-A1EK,558,NA,FEMALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,"Othertobacco, birth control bills",TRUE,FALSE,HBV
+TCGA-DD-A1EL,415,NA,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core AntibodyHBV DNA,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-A39V,643,NA,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A39W,827,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A39X,1694,NA,FEMALE,Hepatitis B Surface AntigenHBV Surface Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-DD-A39Y,171,NA,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-DD-A39Z,601,NA,FEMALE,,Alcohol consumptionextensive tobacco history,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A3A0,785,NA,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-DD-A3A1,233,NA,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A3A2,2131,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A3A3,535,NA,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A3A4,612,NA,MALE,,OtherTobacco use,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A3A5,3125,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A3A6,3258,NA,FEMALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-DD-A3A7,419,NA,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Alcohol consumptionOthertobacco,TRUE,FALSE,HBV
+TCGA-DD-A3A8,11,NA,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-DD-A3A9,931,NA,FEMALE,,Othersmoker,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A4NA,NA,1008,FEMALE,Hepatitis B Surface AntigenHBV Surface Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-DD-A4NB,NA,989,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A4ND,NA,2746,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A4NE,660,NA,FEMALE,Hepatitis C Virus RNAHepatitis B Surface AntigenHBV Core Antibody,No History of Primary Risk Factors,TRUE,TRUE,Co-Infection
+TCGA-DD-A4NF,NA,942,MALE,Hepatitis C Virus RNAHCV GenotypeHepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Hepatitis C,TRUE,TRUE,Co-Infection
+TCGA-DD-A4NG,NA,NA,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-DD-A4NH,NA,917,FEMALE,Hepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-DD-A4NI,NA,816,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Alcohol consumptionNon-Alcoholic Fatty Liver Diseasetobacco,TRUE,FALSE,HBV
+TCGA-DD-A4NJ,NA,928,FEMALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Non-Alcoholic Fatty Liver Disease,TRUE,FALSE,HBV
+TCGA-DD-A4NK,1210,NA,FEMALE,Hepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-DD-A4NL,NA,1711,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Alcohol consumptionOtherTobacco use,TRUE,FALSE,HBV
+TCGA-DD-A4NN,899,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A4NO,NA,2245,MALE,Hepatitis C Virus RNAHepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Hepatitis COtherTobacco use,TRUE,TRUE,Co-Infection
+TCGA-DD-A4NP,NA,3308,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-DD-A4NQ,373,NA,MALE,Hepatitis C Virus RNAHepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Hepatitis BOthertobacco,TRUE,TRUE,Co-Infection
+TCGA-DD-A4NR,9,NA,FEMALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Otherprimary biliary cirrhosis,TRUE,FALSE,HBV
+TCGA-DD-A4NS,2456,NA,FEMALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-DD-A4NV,NA,2398,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,"Non-Alcoholic Fatty Liver DiseaseOthermorbid obesity, tobacco use",TRUE,FALSE,HBV
+TCGA-DD-A73A,NA,728,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-DD-A73B,283,NA,FEMALE,Hepatitis B Surface Antigen,Alpha-1 Antitrypsin DeficiencyOtherGilbert's syndrome.,TRUE,FALSE,HBV
+TCGA-DD-A73C,NA,701,FEMALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-DD-A73D,NA,693,FEMALE,Hepatitis C Virus RNAHepatitis B Surface Antigen,Hepatitis C,TRUE,TRUE,Co-Infection
+TCGA-DD-A73E,NA,44,MALE,Hepatitis B Surface AntigenHBV Surface Antibody,Alcohol consumptionNon-Alcoholic Fatty Liver Disease,TRUE,FALSE,HBV
+TCGA-DD-A73F,NA,1085,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-A73G,NA,3478,FEMALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-DD-AA3A,410,NA,FEMALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-DD-AAC8,16,NA,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAC9,NA,NA,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACA,NA,2301,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACB,NA,2324,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACC,1685,NA,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACD,381,NA,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACE,NA,2184,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACF,365,NA,MALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-DD-AACG,469,NA,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACH,195,NA,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACI,NA,1618,MALE,,,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-AACJ,NA,2102,MALE,,,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-AACK,NA,9,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACL,NA,NA,FEMALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-DD-AACM,NA,1769,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACN,NA,1302,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACO,NA,1876,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACP,NA,415,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-AACQ,NA,NA,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACS,NA,1804,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACT,NA,1562,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACU,NA,1567,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACV,NA,1531,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-AACW,NA,1424,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACX,NA,170,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACY,NA,1450,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AACZ,171,NA,FEMALE,,,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-AAD0,NA,137,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAD1,NA,564,FEMALE,,Hepatitis BHepatitis C,TRUE,TRUE,Co-Infection
+TCGA-DD-AAD2,NA,658,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAD3,NA,1295,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAD5,NA,1345,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAD6,NA,672,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAD8,NA,1219,FEMALE,,Hepatitis BHepatitis C,TRUE,TRUE,Co-Infection
+TCGA-DD-AADA,NA,1233,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADB,NA,1242,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADC,425,NA,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADD,NA,1231,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADE,NA,1202,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADF,115,NA,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADG,NA,1145,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADI,NA,1085,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADJ,NA,1066,FEMALE,,,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-AADK,NA,1049,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADL,NA,636,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADM,12,NA,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADN,NA,898,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADO,NA,453,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADP,NA,458,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADQ,NA,436,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADR,NA,2028,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADS,NA,474,MALE,,Alcohol consumptionHepatitis C,FALSE,TRUE,HCV
+TCGA-DD-AADU,NA,554,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-AADV,NA,574,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADW,NA,587,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AADY,NA,555,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAE0,NA,555,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAE1,NA,552,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAE2,NA,638,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAE3,NA,566,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAE4,NA,608,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAE6,NA,141,FEMALE,,,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-AAE7,NA,644,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAE8,NA,664,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAE9,NA,722,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAEA,NA,575,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAEB,NA,478,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAED,NA,763,MALE,,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAEE,NA,810,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAEG,NA,719,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-AAEH,NA,784,MALE,,,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-AAEI,NA,1531,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAEK,NA,1067,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAVP,NA,2752,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAVQ,NA,2728,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAVR,NA,2513,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAVS,NA,1823,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAVU,NA,2202,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAVV,NA,2455,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAVW,NA,2317,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAVX,NA,1570,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAVY,NA,1970,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-AAVZ,NA,1900,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAW0,NA,2015,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-DD-AAW1,NA,1989,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-AAW2,NA,1855,MALE,,Non-Alcoholic Fatty Liver Disease,FALSE,FALSE,Non-Viral/Unknown
+TCGA-DD-AAW3,NA,1633,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-ED-A459,NA,910,MALE,Hepatitis B Surface Antigen,,TRUE,FALSE,HBV
+TCGA-ED-A4XI,NA,819,MALE,Hepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-ED-A5KG,NA,854,FEMALE,Hepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-ED-A627,NA,423,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-ED-A66X,NA,406,MALE,Hepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-ED-A66Y,NA,NA,FEMALE,Hepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-ED-A7PX,NA,NA,FEMALE,Hepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-ED-A7PY,NA,390,FEMALE,Hepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-ED-A7PZ,NA,NA,MALE,Hepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-ED-A7XO,NA,427,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-ED-A7XP,NA,400,FEMALE,Hepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-ED-A82E,NA,408,FEMALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-ED-A8O5,NA,406,FEMALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-ED-A8O6,NA,NA,FEMALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-ED-A97K,NA,NA,MALE,Hepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-EP-A12J,NA,570,MALE,,Hepatitis CSarcoidosis,FALSE,TRUE,HCV
+TCGA-EP-A26S,NA,608,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-EP-A2KA,NA,357,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-EP-A2KB,NA,334,FEMALE,,"Hepatitis CCirrhosis, Alcohol abuse",FALSE,TRUE,HCV
+TCGA-EP-A2KC,19,NA,MALE,,"Hepatitis CLiver Cirrhosis, Moderate alcohol use on weekends",FALSE,TRUE,HCV
+TCGA-EP-A3JL,NA,303,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-EP-A3RK,NA,363,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-ES-A2HS,688,NA,MALE,,No History of Primary Risk FactorsNo,FALSE,FALSE,Non-Viral/Unknown
+TCGA-ES-A2HT,438,NA,MALE,,Hepatitis Cno,FALSE,TRUE,HCV
+TCGA-FV-A23B,NA,NA,FEMALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-FV-A2QQ,NA,729,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-FV-A2QR,581,NA,MALE,,"OtherMale, IDDM for 30+years",FALSE,FALSE,Non-Viral/Unknown
+TCGA-FV-A3I0,NA,848,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-FV-A3I1,NA,NA,FEMALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface Antibody,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-FV-A3R2,194,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-FV-A3R3,NA,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-FV-A495,NA,NA,FEMALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-FV-A496,NA,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-FV-A4ZP,NA,NA,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-FV-A4ZQ,NA,NA,MALE,Hepatitis C Virus RNA,Hepatitis C,FALSE,TRUE,HCV
+TCGA-G3-A25S,NA,NA,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-G3-A25T,NA,1553,FEMALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-G3-A25U,NA,1636,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-G3-A25V,NA,860,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-G3-A25W,NA,935,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-G3-A25X,NA,1779,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-G3-A25Y,452,NA,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-G3-A25Z,NA,655,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-G3-A3CG,NA,673,MALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-G3-A3CH,NA,780,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-G3-A3CI,NA,NA,MALE,,Non-Alcoholic Fatty Liver Disease,FALSE,FALSE,Non-Viral/Unknown
+TCGA-G3-A3CJ,NA,594,MALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-G3-A3CK,NA,585,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-G3-A5SI,NA,NA,MALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-G3-A5SJ,NA,698,MALE,,Alcohol consumptionHepatitis C,FALSE,TRUE,HCV
+TCGA-G3-A5SK,NA,744,MALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-G3-A5SL,NA,621,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-G3-A5SM,NA,520,MALE,,Alcohol consumptionHepatitis C,FALSE,TRUE,HCV
+TCGA-G3-A6UC,NA,671,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface Antibody,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-G3-A7M5,NA,447,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface Antibody,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-G3-A7M6,NA,632,FEMALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-G3-A7M7,NA,361,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-G3-A7M8,NA,430,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface Antibody,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-G3-A7M9,56,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface Antibody,Hemochromatosis,TRUE,FALSE,HBV
+TCGA-G3-AAUZ,NA,480,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface AntibodyHBV DNA,Hepatitis BNon-Alcoholic Fatty Liver Disease,TRUE,FALSE,HBV
+TCGA-G3-AAV0,NA,476,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface Antibody,Hepatitis B,TRUE,FALSE,HBV
+TCGA-G3-AAV1,359,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface AntibodyHBV DNA,Hepatitis B,TRUE,FALSE,HBV
+TCGA-G3-AAV2,NA,372,MALE,Hepatitis  C AntibodyHepatitis C Virus RNAHepatitis B Surface AntigenHBV Surface Antibody,Alcohol consumptionHepatitis C,TRUE,TRUE,Co-Infection
+TCGA-G3-AAV3,NA,412,FEMALE,,Alcohol consumptionHepatitis CNon-Alcoholic Fatty Liver Disease,FALSE,TRUE,HCV
+TCGA-G3-AAV4,27,NA,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-G3-AAV5,NA,354,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface AntibodyHBV Core Antibody,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-G3-AAV6,65,NA,FEMALE,Hepatitis B Surface Antigen,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-G3-AAV7,NA,361,MALE,Hepatitis B Surface AntigenHBV Surface AntibodyHBV DNA,Hepatitis B,TRUE,FALSE,HBV
+TCGA-GJ-A3OU,NA,879,MALE,Hepatitis  C Antibody,Alcohol consumptionNon-Alcoholic Fatty Liver DiseaseOtherhepatic cirrhosis,FALSE,FALSE,Non-Viral/Unknown
+TCGA-GJ-A6C0,31,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-GJ-A9DB,67,NA,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-HP-A5MZ,91,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-HP-A5N0,752,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-K7-A5RF,NA,631,MALE,Hepatitis C Virus RNA,Hepatitis C,FALSE,TRUE,HCV
+TCGA-K7-A5RG,NA,519,MALE,HCV Genotype,Alcohol consumptionHepatitis C,FALSE,TRUE,HCV
+TCGA-K7-A6G5,NA,512,MALE,HCV Genotype,Alcohol consumptionHepatitis BHepatitis CHemochromatosis,TRUE,TRUE,Co-Infection
+TCGA-K7-AAU7,NA,359,MALE,,Hepatitis CHemochromatosis,FALSE,TRUE,HCV
+TCGA-KR-A7K0,65,NA,MALE,Hepatitis  C Antibody,Alcohol consumptionHepatitis C,FALSE,TRUE,HCV
+TCGA-KR-A7K2,NA,829,MALE,HCV Genotype,Hepatitis C,FALSE,TRUE,HCV
+TCGA-KR-A7K7,NA,951,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-KR-A7K8,NA,906,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-LG-A6GG,NA,387,FEMALE,,OtherCryptogenic Cirrhosis,FALSE,FALSE,Non-Viral/Unknown
+TCGA-LG-A9QC,NA,425,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-LG-A9QD,NA,366,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-MI-A75C,NA,291,MALE,HBV Surface Antibody,Hepatitis C,TRUE,TRUE,Co-Infection
+TCGA-MI-A75E,NA,507,MALE,HCV Genotype,Alcohol consumptionHepatitis C,FALSE,TRUE,HCV
+TCGA-MI-A75G,NA,698,MALE,HCV Genotype,Alcohol consumptionHepatitis C,FALSE,TRUE,HCV
+TCGA-MI-A75H,NA,747,MALE,HCV Genotype,Hepatitis C,FALSE,TRUE,HCV
+TCGA-MI-A75I,NA,630,MALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-MR-A520,NA,229,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Core Antibody,"OtherModerate alcohol consumption, anti TB drug used for TB positive testing",TRUE,FALSE,HBV
+TCGA-MR-A8JO,NA,330,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Core Antibody,Alcohol consumption,TRUE,FALSE,HBV
+TCGA-NI-A4U2,1791,NA,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-NI-A8LF,NA,799,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-O8-A75V,NA,538,MALE,,Alcohol consumptionHepatitis BHepatitis C,TRUE,TRUE,Co-Infection
+TCGA-PD-A5DF,639,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-QA-A7B7,NA,94,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-RC-A6M3,NA,NA,MALE,,,FALSE,FALSE,Non-Viral/Unknown
+TCGA-RC-A6M4,NA,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-RC-A6M5,NA,NA,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-RC-A6M6,NA,NA,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-RC-A7S9,NA,NA,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-RC-A7SB,NA,NA,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-RC-A7SF,NA,NA,MALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-RC-A7SH,NA,NA,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-RC-A7SK,NA,NA,MALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-RG-A7D4,NA,1098,MALE,Hepatitis  C Antibody,Hepatitis C,FALSE,TRUE,HCV
+TCGA-T1-A6J8,NA,23,MALE,,Alcohol consumption,FALSE,FALSE,Non-Viral/Unknown
+TCGA-UB-A7MA,NA,848,FEMALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-UB-A7MB,NA,601,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Core Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-UB-A7MC,NA,500,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV DNA,Alcohol consumptionHepatitis B,TRUE,FALSE,HBV
+TCGA-UB-A7MD,52,NA,MALE,Hepatitis  C AntibodyHepatitis C Virus RNAHCV GenotypeHepatitis B Surface Antigen,Alcohol consumptionHepatitis C,TRUE,TRUE,Co-Infection
+TCGA-UB-A7ME,NA,486,MALE,Hepatitis B Surface AntigenHBV Core AntibodyHBV DNA,Hepatitis B,TRUE,FALSE,HBV
+TCGA-UB-A7MF,214,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Core AntibodyHBV DNA,Hepatitis BHepatitis C,TRUE,TRUE,Co-Infection
+TCGA-UB-AA0U,NA,327,MALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Core Antibody,Non-Alcoholic Fatty Liver Disease,TRUE,FALSE,HBV
+TCGA-UB-AA0V,NA,314,FEMALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Core Antibody,Hemochromatosis,TRUE,FALSE,HBV
+TCGA-WJ-A86L,NA,345,FEMALE,Hepatitis  C AntibodyHepatitis B Surface AntigenHBV Surface Antibody,No History of Primary Risk Factors,TRUE,FALSE,HBV
+TCGA-WQ-A9G7,NA,30,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-WQ-AB4B,NA,395,MALE,,Alcohol consumptionNon-Alcoholic Fatty Liver DiseaseOtherHepatic Encephalopathy,FALSE,FALSE,Non-Viral/Unknown
+TCGA-WX-AA44,NA,615,FEMALE,Hepatitis  C Antibody,Non-Alcoholic Fatty Liver Disease,FALSE,FALSE,Non-Viral/Unknown
+TCGA-WX-AA46,NA,756,MALE,Hepatitis  C Antibody,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-WX-AA47,556,NA,FEMALE,Hepatitis  C Antibody,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-XR-A8TC,NA,1339,FEMALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-XR-A8TD,NA,1030,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-XR-A8TE,NA,925,MALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-XR-A8TF,693,NA,MALE,,Hepatitis B,TRUE,FALSE,HBV
+TCGA-XR-A8TG,NA,898,MALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-YA-A8S7,412,NA,MALE,,Hepatitis C,FALSE,TRUE,HCV
+TCGA-ZP-A9CV,NA,NA,MALE,,Alcohol consumptionHepatitis C,FALSE,TRUE,HCV
+TCGA-ZP-A9CY,NA,782,FEMALE,,Non-Alcoholic Fatty Liver Disease,FALSE,FALSE,Non-Viral/Unknown
+TCGA-ZP-A9CZ,NA,706,MALE,Hepatitis B Surface Antigen,Hepatitis B,TRUE,FALSE,HBV
+TCGA-ZP-A9D0,NA,1091,FEMALE,,Non-Alcoholic Fatty Liver Disease,FALSE,FALSE,Non-Viral/Unknown
+TCGA-ZP-A9D1,NA,21,FEMALE,,Non-Alcoholic Fatty Liver Disease,FALSE,FALSE,Non-Viral/Unknown
+TCGA-ZP-A9D2,NA,743,MALE,Hepatitis C Virus RNA,Hepatitis C,FALSE,TRUE,HCV
+TCGA-ZP-A9D4,NA,395,FEMALE,,No History of Primary Risk Factors,FALSE,FALSE,Non-Viral/Unknown
+TCGA-ZS-A9CD,1386,NA,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,,TRUE,FALSE,HBV
+TCGA-ZS-A9CE,NA,1241,FEMALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,,TRUE,FALSE,HBV
+TCGA-ZS-A9CF,NA,2412,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,Hemochromatosis,TRUE,FALSE,HBV
+TCGA-ZS-A9CG,NA,341,MALE,Hepatitis  C AntibodyHepatitis B Surface Antigen,,TRUE,FALSE,HBV
