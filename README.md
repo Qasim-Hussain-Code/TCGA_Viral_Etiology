@@ -24,7 +24,7 @@ Comprehensive transcriptomic analysis comparing **viral** (HBV/HCV) versus **non
 source("install_packages.R")
 
 # Run analysis
-rmarkdown::render("TCGA_Viral_Etiology_Analysis_Enhanced.Rmd")
+rmarkdown::render("TCGA_Viral_Etiology_Analysis.Rmd")
 ```
 
 ## Repository Structure
