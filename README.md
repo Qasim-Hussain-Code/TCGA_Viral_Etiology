@@ -31,7 +31,7 @@ rmarkdown::render("TCGA_Viral_Etiology_Analysis.Rmd")
 ## Repository Structure
 
 ```
-├── TCGA_Viral_Etiology_Analysis_Enhanced.Rmd  # Main analysis
+├── TCGA_Viral_Etiology_Analysis.Rmd  # Main analysis
 ├── install_packages.R                         # Setup
 ├── data/                                      # Input files
 ├── results/                                   # CSV outputs
